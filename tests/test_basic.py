@@ -1,4 +1,5 @@
 import os
+from io import BytesIO
 
 import pytest
 
@@ -505,3 +506,13 @@ def test_size_and_aligment(cs: cstruct):
     test = cs._make_packed_type("test", "B", int, alignment=8)
     assert test.size == 1
     assert test.alignment == 8
+
+
+def test_dumps_write_overload(cs: cstruct):
+    assert cs.uint8.dumps(1) == cs.uint8(1).dumps() == b"\x01"
+
+    fh = BytesIO()
+    cs.uint8.write(fh, 1)
+    assert fh.getvalue() == b"\x01"
+    cs.uint8(2).write(fh)
+    assert fh.getvalue() == b"\x01\x02"
