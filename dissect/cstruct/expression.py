@@ -249,9 +249,9 @@ class Expression:
             if self.is_number(current_token):
                 self.queue.append(int(current_token, 0))
             elif current_token in context:
-                self.queue.append(int(context[current_token]))
+                self.queue.append(context[current_token])
             elif current_token in self.cstruct.consts:
-                self.queue.append(int(self.cstruct.consts[current_token]))
+                self.queue.append(self.cstruct.consts[current_token])
             elif current_token in self.unary_operators:
                 self.stack.append(current_token)
             elif current_token == "sizeof":
