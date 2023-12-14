@@ -304,7 +304,7 @@ class cstruct:
             {
                 "cs": self,
                 "size": size,
-                "dynamic": size is None,
+                "dynamic": attrs.get("dynamic", size is None),
                 "alignment": alignment or size,
             }
         )
@@ -313,7 +313,7 @@ class cstruct:
     def _make_array(self, type_: MetaType, num_entries: Optional[UnionHint[int, Expression]]) -> type[Array]:
         null_terminated = num_entries is None
         dynamic = isinstance(num_entries, Expression)
-        size = None if null_terminated or dynamic else num_entries * type_.size
+        size = None if null_terminated or dynamic or type_.size is None else num_entries * type_.size
         name = f"{type_.__name__}[]" if null_terminated else f"{type_.__name__}[{num_entries}]"
 
         bases = (type_.ArrayType,)
